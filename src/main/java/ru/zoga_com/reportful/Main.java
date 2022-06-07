@@ -4,6 +4,7 @@ import javax.security.auth.login.LoginException;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.utils.Compression;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import ru.zoga_com.reportful.listeners.ReceivedMessage;
@@ -24,6 +25,7 @@ public class Main {
             botBuilder.setBulkDeleteSplittingEnabled(false);
             botBuilder.setCompression(Compression.NONE);
             botBuilder.addEventListeners(new ReceivedMessage());
+            botBuilder.setActivity(Activity.competing("количестве репортов."));
             jda = botBuilder.build();
             jda.awaitReady();
         } catch(LoginException | InterruptedException e) { Log.printException("Бот не смог авторизоваться. Проверьте правильность токена бота в bot.config\n"); e.printStackTrace(); }
