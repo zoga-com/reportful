@@ -22,6 +22,6 @@
 2. Установите Maven (если он не установлен)
 3. Откройте терминал/командную строку
 4. Введите команду
- Windows: mvnw clean compile assembly:single
- Linux: mvn clean compile assembly:single
-5. После успешной компиляции .jar будет находится по пути target/reportful-1.0-jar-with-dependencies.jar
+5. Windows: mvnw clean compile assembly:single
+6. Linux: mvn clean compile assembly:single
+7. После успешной компиляции .jar будет находится по пути target/reportful-1.0-jar-with-dependencies.jar
