@@ -32,7 +32,11 @@ public class History implements Command {
                     embed.setColor(Color.CYAN);
                     embed.setDescription("**Логи пользователя " + args[1] + "**\nКоличество выводимых строк: 50.\n\n" + messages);
                     Main.getJDA().getTextChannelById(msg.getChannel().getId()).sendMessageEmbeds(embed.build()).queue();
+                } else {
+                    msg.getChannel().sendMessage("Вы не указали тег.");
                 }
+            } else {
+                msg.getChannel().sendMessage("Команда использована неверно.\n\nПравильное использование: /history @<пользователь>.");
             }
         } catch(SQLException e) { e.printStackTrace(); }
     }
