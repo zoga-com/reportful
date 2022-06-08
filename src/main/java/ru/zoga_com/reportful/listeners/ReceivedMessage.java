@@ -27,7 +27,7 @@ public class ReceivedMessage extends ListenerAdapter {
     }
 
     public static void initCommands() { // добавление команд в хешмапу
-        hash.put("/report", new Report());
-        hash.put("/history", new History());
+        hash.put(new Report().getCommandName(), new Report());
+        hash.put(new History().getCommandName(), new History());
     }
 }

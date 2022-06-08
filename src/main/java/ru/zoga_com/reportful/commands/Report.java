@@ -9,15 +9,13 @@ import java.awt.Color;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import ru.zoga_com.reportful.Main;
-import ru.zoga_com.reportful.misc.Config;
 import ru.zoga_com.reportful.misc.Database;
-import ru.zoga_com.reportful.misc.Log;
+import ru.zoga_com.reportful.misc.Env;
 import ru.zoga_com.reportful.misc.Time;
 import ru.zoga_com.reportful.types.Command;
 
 public class Report implements Command {
     private static String commandName = "/report"; // имя команды (на его основе будут обновы ещё)
-    private Config config = new Config();
 
     public void onCommand(String[] args, Message msg) {
         try {
@@ -42,9 +40,9 @@ public class Report implements Command {
                     Database.insertQuery("INSERT INTO reports(message,author,reported,time,channel) VALUES('" + reason.replaceAll("'", "''") + "','" + msg.getAuthor().getName().replaceAll("'", "''") + "#" + msg.getAuthor().getDiscriminator() + "','" + msg.getMentions().getUsers().get(0).getName().replaceAll("'", "''") + "#" + msg.getMentions().getUsers().get(0).getDiscriminator() + "','" + System.currentTimeMillis() + "','" + msg.getChannel().getName().replaceAll("'", "''") + "')");
                     msg.getChannel().sendMessage("Репорт зарегистрирован.").queue();
                     EmbedBuilder embed = new EmbedBuilder();
-                    embed.setColor(Color.CYAN);
+                    embed.setColor(Color.decode(Env.REPORT_COLOR));
                     embed.setDescription("**Репорт на " + args[1] + "**\n\nПричина: " + reason + "\nТег подавшего репорт пользователя: " + msg.getAuthor().getName().replaceAll("'", "''") + "#" + msg.getAuthor().getDiscriminator() + "\n\n\nПоследние 5 сообщений нарушителя: \n" + message);
-                    Main.getJDA().getTextChannelById(config.getReceiveChannel()).sendMessageEmbeds(embed.build()).queue();
+                    Main.getJDA().getTextChannelById(Env.RECEIVE_CHANNEL).sendMessageEmbeds(embed.build()).queue();
                 } else { 
                     msg.getChannel().sendMessage("Вы не упомянули нарушителя.").queue();
                 }

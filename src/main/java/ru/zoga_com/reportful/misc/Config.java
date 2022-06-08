@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class Config {
-    private Properties props = new Properties();
+    private static Properties props = new Properties();
 
-    public Config() { // конструктор
+    public static void initConfig() { // генерация и пожгрузка конфига в программу
         try {
             createConfigIfNotExists();
             FileInputStream fStream = new FileInputStream("bot.config");
@@ -17,15 +17,11 @@ public class Config {
         } catch(IOException e) { e.printStackTrace(); }
     }
 
-    public String getBotToken() { // возвращает токен
-        return props.getProperty("token");
+    public static String getProp(String key) { // 
+        return props.getProperty(key);
     }
 
-    public String getReceiveChannel() { // вовзвращает канал в который кидать репорты
-        return props.getProperty("receiveChannel");
-    }
-
-    private void createConfigIfNotExists() throws IOException { // сгенерировать конфиг
+    private static void createConfigIfNotExists() throws IOException { // сгенерировать конфиг
         File config = new File("bot.config");
         if(!config.exists()) {
             config.createNewFile();
@@ -33,10 +29,11 @@ public class Config {
         }
     }
 
-    private void fillConfig() throws IOException {
+    private static void fillConfig() throws IOException {
         FileWriter fw = new FileWriter("bot.config");
-        fw.write("token=CHANGEME");
-        fw.write("receiveChannel=0");
+        fw.write("token=CHANGEME\n");
+        fw.write("receiveChannel=0\n");
+        fw.write("reportColor=#ffffff\n");
         fw.close();
     }
 }

@@ -16,7 +16,7 @@
 
 
 
-**Гайд по компиляции**
+## Гайд по компиляции
 
 1. Откройте папку с проектом
 2. Установите Maven (если он не установлен)
@@ -25,3 +25,9 @@
 5. Windows: mvnw clean compile assembly:single
 6. Linux: mvn clean compile assembly:single
 7. После успешной компиляции .jar будет находится по пути target/reportful-1.0-jar-with-dependencies.jar
+
+## Гайд по настройке
+Все настройки бота находятся в файле **bot.config**
+Поле "token" - отвечает за токен бота. (получить этот токен можно на dev-портале Discord - https://discord.com/developers/applications)
+Поле "receiveChannel" - отвечает за канал, в который присылается репорт. (ID канала)
+Поле "reportColor" - отвечает за цвет присылаемого репорта. (только HEX-формат)
