@@ -17,7 +17,7 @@ public class History implements Command {
 
     public void onCommand(String[] args, Message msg) {
         try {
-            if(msg.getGuild().getMember(msg.getAuthor()).hasPermission(Permission.MESSAGE_MANAGE)) {
+            if(msg.getMember().hasPermission(Permission.MESSAGE_MANAGE)) {
                 if(args.length == 2) {
                     if(args[1].toString().startsWith("<@")) { // проверка что после вызова команды именно тег
                         ResultSet userMessages = Database.getQuery("SELECT * FROM (SELECT * FROM messages WHERE author = '" + msg.getMentions().getUsers().get(0).getName().replaceAll("'", "''") + "#" + msg.getMentions().getUsers().get(0).getDiscriminator() + "' ORDER BY id DESC LIMIT 50)Var1 ORDER BY id ASC;");
@@ -38,10 +38,10 @@ public class History implements Command {
                         msg.getChannel().sendMessage("Вы не указали тег.");
                     }
                 } else {
-                    msg.getChannel().sendMessage("Команда использована неверно.\n\nПравильное использование: /history @<пользователь>.");
+                    msg.getChannel().sendMessage("Команда использована неверно.\n\nПравильное использование: /history @<пользователь>.").queue();
                 }
             } else {
-                msg.getChannel().sendMessage("Недостаточно прав для выполнения данной команды.");
+                msg.getChannel().sendMessage("Недостаточно прав для выполнения данной команды.").queue();
             }
         } catch(SQLException e) { e.printStackTrace(); }
     }
