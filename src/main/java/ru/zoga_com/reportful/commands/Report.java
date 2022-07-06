@@ -16,7 +16,7 @@ import ru.zoga_com.reportful.misc.Time;
 import ru.zoga_com.reportful.types.Command;
 
 public class Report implements Command {
-    private static String commandName = "/report2"; // имя команды (на его основе будут обновы ещё)
+    private static String commandName = "/report"; // имя команды (на его основе будут обновы ещё)
 
     public void onCommand(String[] args, Message msg) {
         try {

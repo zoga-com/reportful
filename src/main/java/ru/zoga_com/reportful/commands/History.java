@@ -14,7 +14,7 @@ import ru.zoga_com.reportful.misc.Time;
 import ru.zoga_com.reportful.types.Command;
 
 public class History implements Command {
-    private static String commandName = "/history2"; // имя команды (на его основе будут обновы ещё)
+    private static String commandName = "/history"; // имя команды (на его основе будут обновы ещё)
 
     public void onCommand(String[] args, Message msg) {
         try {
