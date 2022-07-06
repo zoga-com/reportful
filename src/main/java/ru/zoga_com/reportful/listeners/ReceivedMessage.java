@@ -17,18 +17,18 @@ public class ReceivedMessage extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if(!event.isFromType(ChannelType.PRIVATE) && !event.getAuthor().isBot()) { // в этом ифе логгируются сообщения в бд
+            if(event.getMessage().getContentRaw().startsWith("/")) { // в этом ифе обрабатываются команды
+                String[] args = event.getMessage().getContentRaw().split(" ");
+                if(hash.get(args[0]) != null) {
+                    hash.get(args[0]).onCommand(args, event.getMessage());
+                }
+            }
             Runnable task = new Runnable() {
                 public void run() {
                     Database.insertQuery("INSERT INTO messages(message,author,time,channel) VALUES('" + event.getMessage().getContentRaw().replaceAll("'", "''") + "','" + event.getMessage().getAuthor().getName().replaceAll("'", "''") + "#" + event.getMessage().getAuthor().getDiscriminator() + "','" + System.currentTimeMillis() + "','" + event.getMessage().getChannel().getName().replaceAll("'", "''") + "')");
                 }
             };
             new TaskManager(task);
-        }
-        if(!event.isFromType(ChannelType.PRIVATE) && event.getMessage().getContentRaw().startsWith("/") && !event.getAuthor().isBot()) { // в этом ифе обрабатываются команды
-            String[] args = event.getMessage().getContentRaw().split(" ");
-            if(hash.get(args[0]) != null) {
-                hash.get(args[0]).onCommand(args, event.getMessage());
-            }
         }
     }
 
