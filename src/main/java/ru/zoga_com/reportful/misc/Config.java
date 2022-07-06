@@ -14,7 +14,7 @@ public class Config {
             createConfigIfNotExists();
             FileInputStream fStream = new FileInputStream("bot.config");
             props.load(fStream);
-        } catch(IOException e) { e.printStackTrace(); }
+        } catch(IOException e) { Log.printException(e.getMessage(), Config.class); }
     }
 
     public static String getProp(String key) { // 

@@ -5,6 +5,7 @@ import java.util.Map;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import ru.zoga_com.reportful.TaskManager;
 import ru.zoga_com.reportful.commands.History;
 import ru.zoga_com.reportful.commands.Report;
 import ru.zoga_com.reportful.misc.Database;
@@ -16,7 +17,12 @@ public class ReceivedMessage extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if(!event.isFromType(ChannelType.PRIVATE) && !event.getAuthor().isBot()) { // в этом ифе логгируются сообщения в бд
-            Database.insertQuery("INSERT INTO messages(message,author,time,channel) VALUES('" + event.getMessage().getContentRaw().replaceAll("'", "''") + "','" + event.getMessage().getAuthor().getName().replaceAll("'", "''") + "#" + event.getMessage().getAuthor().getDiscriminator() + "','" + System.currentTimeMillis() + "','" + event.getMessage().getChannel().getName().replaceAll("'", "''") + "')");
+            Runnable task = new Runnable() {
+                public void run() {
+                    Database.insertQuery("INSERT INTO messages(message,author,time,channel) VALUES('" + event.getMessage().getContentRaw().replaceAll("'", "''") + "','" + event.getMessage().getAuthor().getName().replaceAll("'", "''") + "#" + event.getMessage().getAuthor().getDiscriminator() + "','" + System.currentTimeMillis() + "','" + event.getMessage().getChannel().getName().replaceAll("'", "''") + "')");
+                }
+            };
+            new TaskManager(task);
         }
         if(!event.isFromType(ChannelType.PRIVATE) && event.getMessage().getContentRaw().startsWith("/") && !event.getAuthor().isBot()) { // в этом ифе обрабатываются команды
             String[] args = event.getMessage().getContentRaw().split(" ");

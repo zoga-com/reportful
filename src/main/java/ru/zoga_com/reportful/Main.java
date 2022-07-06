@@ -28,7 +28,11 @@ public class Main {
             botBuilder.setActivity(Activity.competing("количестве репортов."));
             jda = botBuilder.build();
             jda.awaitReady();
-        } catch(LoginException | InterruptedException e) { Log.printException("Бот не смог авторизоваться. Проверьте правильность токена бота в bot.config\n"); e.printStackTrace(); }
+            Log.printMessage("Для ассинхронных задач выделено " + TaskManager.getUsedThreads() + " потоков.", Main.class);
+        } catch(LoginException | InterruptedException e) { 
+            Log.printMessage("Бот не смог авторизоваться. Проверьте правильность токена бота в bot.config\n", Main.class); 
+            Log.printException(e.getMessage(), Main.class);
+        }
     }
 
     public static JDA getJDA() {

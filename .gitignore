@@ -2,3 +2,4 @@ reports.db
 bot.config
 target/
 .vscode/
+.apt_generated_tests

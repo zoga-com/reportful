@@ -11,11 +11,12 @@ import net.dv8tion.jda.api.entities.Message;
 import ru.zoga_com.reportful.Main;
 import ru.zoga_com.reportful.misc.Database;
 import ru.zoga_com.reportful.misc.Env;
+import ru.zoga_com.reportful.misc.Log;
 import ru.zoga_com.reportful.misc.Time;
 import ru.zoga_com.reportful.types.Command;
 
 public class Report implements Command {
-    private static String commandName = "/report"; // имя команды (на его основе будут обновы ещё)
+    private static String commandName = "/report2"; // имя команды (на его основе будут обновы ещё)
 
     public void onCommand(String[] args, Message msg) {
         try {
@@ -29,11 +30,11 @@ public class Report implements Command {
                     String message = "";
                     ResultSet userLastMessage = Database.getQuery("SELECT * FROM (SELECT * FROM messages WHERE author = '" + msg.getMentions().getUsers().get(0).getName().replaceAll("'", "''") + "#" + msg.getMentions().getUsers().get(0).getDiscriminator() + "' ORDER BY id DESC LIMIT 5)Var1 ORDER BY id ASC;");
                     for(int i = 1; i <= 5; i++) {
+                        userLastMessage.next();
                         if(!userLastMessage.isClosed()) {
                             Calendar date = Calendar.getInstance(); 
                             date.setTimeInMillis(userLastMessage.getLong("time"));
                             message = message + "#" + userLastMessage.getString("channel") + " [" + Time.getDate(date) + "] " + userLastMessage.getString("message") + "\n";
-                            userLastMessage.next();
                         }
                     }
                     userLastMessage.close();
@@ -49,7 +50,7 @@ public class Report implements Command {
             } else {
                 msg.getChannel().sendMessage("Команда использована неверно.\n\nПравильное использование: /report @<нарушитель> <причина>.").queue();
             }
-        } catch(Exception e) { e.printStackTrace(); }
+        } catch(Exception e) { Log.printException(e.getMessage(), Report.class); }
     }
 
     public String getCommandName() {

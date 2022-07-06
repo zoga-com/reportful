@@ -9,11 +9,12 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Message;
 import ru.zoga_com.reportful.Main;
 import ru.zoga_com.reportful.misc.Database;
+import ru.zoga_com.reportful.misc.Log;
 import ru.zoga_com.reportful.misc.Time;
 import ru.zoga_com.reportful.types.Command;
 
 public class History implements Command {
-    private static String commandName = "/history"; // имя команды (на его основе будут обновы ещё)
+    private static String commandName = "/history2"; // имя команды (на его основе будут обновы ещё)
 
     public void onCommand(String[] args, Message msg) {
         try {
@@ -23,11 +24,11 @@ public class History implements Command {
                         ResultSet userMessages = Database.getQuery("SELECT * FROM (SELECT * FROM messages WHERE author = '" + msg.getMentions().getUsers().get(0).getName().replaceAll("'", "''") + "#" + msg.getMentions().getUsers().get(0).getDiscriminator() + "' ORDER BY id DESC LIMIT 50)Var1 ORDER BY id ASC;");
                         String messages = "";
                         for(int i = 1; i <= 50; i++) {
+                            userMessages.next();
                             if(!userMessages.isClosed()) {
                                 Calendar date = Calendar.getInstance(); 
                                 date.setTimeInMillis(userMessages.getLong("time"));
                                 messages = messages + "#" + userMessages.getString("channel") + " [" + Time.getDate(date) + "] " + userMessages.getString("message") + "\n";
-                                userMessages.next();
                             }
                         }
                         EmbedBuilder embed = new EmbedBuilder();
@@ -43,7 +44,7 @@ public class History implements Command {
             } else {
                 msg.getChannel().sendMessage("Недостаточно прав для выполнения данной команды.").queue();
             }
-        } catch(SQLException e) { e.printStackTrace(); }
+        } catch(SQLException e) { Log.printException(e.getMessage(), History.class); }
     }
 
     public String getCommandName() {

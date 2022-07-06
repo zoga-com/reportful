@@ -13,8 +13,8 @@ public class Database {
     private static void startConnect() { // поднять подключение
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:reports.db");
-            Log.printMessage("База репортов подключена.");
-        } catch(SQLException e) { e.printStackTrace(); }
+            Log.printMessage("База репортов подключена.", Database.class);
+        } catch(SQLException e) { Log.printException(e.getMessage(), Database.class); }
     }
 
     public static void startDB() { // поднять бд в принципе
@@ -27,7 +27,7 @@ public class Database {
             Statement state = connection.createStatement();
             state.execute("CREATE TABLE IF NOT EXISTS reports (id integer PRIMARY KEY, message text, author text, reported text, time integer(128), channel text);");
             state.execute("CREATE TABLE IF NOT EXISTS messages (id integer PRIMARY KEY, message text, author text, time integer(128), channel text);");
-        } catch(SQLException e) { e.printStackTrace(); }
+        } catch(SQLException e) { Log.printException(e.getMessage(), Database.class); }
     }
 
     public static ResultSet getQuery(String query) { // получить значение
@@ -35,13 +35,16 @@ public class Database {
             PreparedStatement prepState = connection.prepareStatement(query);
             ResultSet result = prepState.executeQuery();
             return result;
-        } catch(SQLException e) { e.printStackTrace(); return null; }
+        } catch(SQLException e) { 
+            Log.printException(e.getMessage(), Database.class);
+             return null; 
+        }
     }
 
     public static void insertQuery(String query) { // создать значение
         try {
             PreparedStatement prepState = connection.prepareStatement(query);
             prepState.executeUpdate();
-        } catch(SQLException e) { e.printStackTrace(); }
+        } catch(SQLException e) { Log.printException(e.getMessage(), Database.class); }
     }
 }
